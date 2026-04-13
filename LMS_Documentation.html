@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LMS Documentation</title>
+    <style>
+      :root {
+        --bg: #f5f5f2;
+        --paper: #ffffff;
+        --ink: #111111;
+        --muted: #5f5f5f;
+        --line: #d8d8d2;
+        --line-strong: #b8b8af;
+        --soft: #f0f0eb;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.65), transparent 28%),
+          repeating-linear-gradient(135deg, rgba(17, 17, 17, 0.02) 0, rgba(17, 17, 17, 0.02) 1px, transparent 1px, transparent 16px),
+          var(--bg);
+      }
+
+      .document {
+        width: 210mm;
+        margin: 0 auto;
+        background: var(--paper);
+      }
+
+      .page {
+        min-height: 297mm;
+        padding: 18mm 16mm;
+        border-bottom: 1px solid var(--line);
+        position: relative;
+      }
+
+      .page:last-child { border-bottom: none; }
+
+      .badge {
+        display: inline-flex;
+        padding: 8px 14px;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: var(--soft);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1, h2, h3 { margin: 0; line-height: 1.15; }
+      h1 { font-size: 42px; margin-top: 18px; }
+      h2 { font-size: 24px; margin-bottom: 14px; }
+      h3 { font-size: 16px; margin-bottom: 8px; }
+
+      p, li {
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .lead {
+        font-size: 16px;
+        color: var(--ink);
+        max-width: 560px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card, .diagram {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 16px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.92), transparent 40%),
+          var(--paper);
+      }
+
+      .label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+        background: var(--paper);
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 22px;
+        margin-top: 6px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        font-size: 12.5px;
+      }
+
+      th, td {
+        border: 1px solid var(--line);
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--soft);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      ul { margin: 8px 0 0 18px; padding: 0; }
+
+      .footer-note {
+        position: absolute;
+        bottom: 10mm;
+        left: 16mm;
+        right: 16mm;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .cover-panel {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 18px;
+        margin-top: 22px;
+      }
+
+      .mock-app {
+        border: 1px solid var(--line-strong);
+        border-radius: 24px;
+        padding: 16px;
+        background: #fbfbf9;
+      }
+
+      .mock-shell {
+        display: grid;
+        grid-template-columns: 128px 1fr;
+        gap: 12px;
+      }
+
+      .mock-sidebar, .mock-main, .mock-box, .mock-chip {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #fff;
+      }
+
+      .mock-sidebar { padding: 12px; display: grid; gap: 10px; }
+      .mock-main { padding: 12px; display: grid; gap: 12px; }
+      .mock-box { padding: 12px; }
+      .mock-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+      .mock-chip { height: 34px; }
+      .mock-row { height: 16px; border-radius: 999px; margin-bottom: 7px; background: linear-gradient(90deg, #111111 0 18%, #ecece6 18% 100%); }
+
+      @page { size: A4; margin: 0; }
+      @media print {
+        body { background: #fff; }
+        .document { width: auto; }
+        .page { page-break-after: always; }
+        .page:last-child { page-break-after: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="document">
+      <section class="page">
+        <span class="badge">Lodge Management Software</span>
+        <h1>Product Documentation</h1>
+        <p class="lead">
+          Professional black and white lodge operations software built for a single-property launch,
+          with room management, guest workflows, employee tracking, services, housekeeping,
+          inventory, and Supabase-ready cloud persistence.
+        </p>
+
+        <div class="cover-panel">
+          <div class="mock-app">
+            <span class="label">Interface Preview</span>
+            <div class="mock-shell">
+              <div class="mock-sidebar">
+                <div class="mock-chip"></div>
+                <div class="mock-chip"></div>
+                <div class="mock-chip"></div>
+                <div class="mock-chip"></div>
+                <div class="mock-chip"></div>
+              </div>
+              <div class="mock-main">
+                <div class="mock-box">
+                  <div class="mock-kpis">
+                    <div class="mock-chip"></div>
+                    <div class="mock-chip"></div>
+                    <div class="mock-chip"></div>
+                    <div class="mock-chip"></div>
+                  </div>
+                </div>
+                <div class="mock-box">
+                  <div class="mock-row"></div>
+                  <div class="mock-row"></div>
+                  <div class="mock-row"></div>
+                  <div class="mock-row"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <span class="label">Prepared For</span>
+            <h3>Owner / Reseller / Customer Demo</h3>
+            <p>This document explains what is built, how it works, what technology is used, and how it can be hosted.</p>
+
+            <span class="label">Current Scope</span>
+            <ul>
+              <li>Single lodge operations software</li>
+              <li>White theme default with black mode toggle</li>
+              <li>Static hosting friendly architecture</li>
+              <li>Supabase-ready cloud data flow</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <span class="label">Theme Modes</span>
+            <strong>2</strong>
+            <p>White default and black optional mode</p>
+          </div>
+          <div class="metric">
+            <span class="label">Main Modules</span>
+            <strong>13</strong>
+            <p>Dashboard to user access control</p>
+          </div>
+          <div class="metric">
+            <span class="label">Add Forms</span>
+            <strong>7+</strong>
+            <p>Guests, rooms, staff, stock and services</p>
+          </div>
+          <div class="metric">
+            <span class="label">Cloud Ready</span>
+            <strong>Yes</strong>
+            <p>Supabase sync with local fallback support</p>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          <span>Prepared from the current LMS codebase</span>
+          <span>Date: 13 April 2026</span>
+        </div>
+      </section>
+
+      <section class="page">
+        <h2>1. Executive Summary</h2>
+        <p>
+          The application is a frontend-first Lodge Management Software built in React and Vite.
+          It is designed to help one lodge manage daily operations such as room status, guest intake,
+          employee records, service menus, expense tracking, inventory, housekeeping, billing, and
+          admin access.
+        </p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Business Goal</h3>
+            <p>Launch quickly for a single property, demo easily to customers, and keep the software affordable to host and support.</p>
+          </div>
+          <div class="card">
+            <h3>Current Delivery Model</h3>
+            <p>Static frontend hosting plus optional Supabase cloud storage, with local browser storage fallback when cloud sync is not configured.</p>
+          </div>
+        </div>
+
+        <div class="diagram" style="margin-top: 18px;">
+          <span class="label">System Architecture</span>
+          <svg viewBox="0 0 620 250" width="100%" height="240" aria-label="architecture diagram">
+            <rect x="18" y="78" width="155" height="84" rx="18" fill="#ffffff" stroke="#b8b8af" stroke-width="2"/>
+            <text x="95" y="110" text-anchor="middle" font-size="16" fill="#111111" font-weight="700">User Browser</text>
+            <text x="95" y="132" text-anchor="middle" font-size="12" fill="#5f5f5f">Desktop / Mobile</text>
+
+            <rect x="220" y="42" width="178" height="154" rx="18" fill="#f0f0eb" stroke="#b8b8af" stroke-width="2"/>
+            <text x="309" y="82" text-anchor="middle" font-size="16" fill="#111111" font-weight="700">React + Vite App</text>
+            <text x="309" y="108" text-anchor="middle" font-size="12" fill="#5f5f5f">Routes, forms, theme, dashboard</text>
+            <text x="309" y="128" text-anchor="middle" font-size="12" fill="#5f5f5f">Module logic and sync layer</text>
+            <text x="309" y="148" text-anchor="middle" font-size="12" fill="#5f5f5f">White / Black theme system</text>
+
+            <rect x="445" y="30" width="148" height="72" rx="18" fill="#ffffff" stroke="#b8b8af" stroke-width="2"/>
+            <text x="519" y="60" text-anchor="middle" font-size="15" fill="#111111" font-weight="700">localStorage</text>
+            <text x="519" y="80" text-anchor="middle" font-size="11" fill="#5f5f5f">Offline / local fallback</text>
+
+            <rect x="445" y="126" width="148" height="88" rx="18" fill="#111111" stroke="#111111" stroke-width="2"/>
+            <text x="519" y="158" text-anchor="middle" font-size="15" fill="#ffffff" font-weight="700">Supabase</text>
+            <text x="519" y="178" text-anchor="middle" font-size="11" fill="#d4d4d4">Cloud app_state row</text>
+            <text x="519" y="196" text-anchor="middle" font-size="11" fill="#d4d4d4">Shared device sync</text>
+
+            <line x1="173" y1="120" x2="220" y2="120" stroke="#111111" stroke-width="2"/>
+            <polygon points="220,120 210,114 210,126" fill="#111111"/>
+            <line x1="398" y1="88" x2="445" y2="68" stroke="#111111" stroke-width="2"/>
+            <polygon points="445,68 434,66 438,76" fill="#111111"/>
+            <line x1="398" y1="146" x2="445" y2="168" stroke="#111111" stroke-width="2"/>
+            <polygon points="445,168 434,160 430,170" fill="#111111"/>
+          </svg>
+        </div>
+
+        <div class="footer-note">
+          <span>Section 1</span>
+          <span>Executive Summary</span>
+        </div>
+      </section>
+
+      <section class="page">
+        <h2>2. Technology Stack</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Technology</th>
+              <th>Purpose</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frontend</td>
+              <td>React 18</td>
+              <td>Build the user interface and module pages</td>
+              <td>Implemented</td>
+            </tr>
+            <tr>
+              <td>Build Tool</td>
+              <td>Vite 8</td>
+              <td>Fast development server and production build</td>
+              <td>Configured and verified</td>
+            </tr>
+            <tr>
+              <td>Language</td>
+              <td>TypeScript</td>
+              <td>Type safety and maintainability</td>
+              <td>Implemented</td>
+            </tr>
+            <tr>
+              <td>Routing</td>
+              <td>React Router DOM</td>
+              <td>Navigation between app modules</td>
+              <td>Implemented</td>
+            </tr>
+            <tr>
+              <td>Local Persistence</td>
+              <td>localStorage</td>
+              <td>Offline / local-only data storage</td>
+              <td>Implemented</td>
+            </tr>
+            <tr>
+              <td>Cloud Persistence</td>
+              <td>Supabase REST + Postgres</td>
+              <td>Shared multi-device lodge data</td>
+              <td>Prepared and environment based</td>
+            </tr>
+            <tr>
+              <td>Styling</td>
+              <td>Custom CSS</td>
+              <td>Professional black and white UI system</td>
+              <td>Implemented</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-3" style="margin-top: 18px;">
+          <div class="card">
+            <h3>Why React</h3>
+            <p>Clean module separation and easy extension of business features over time.</p>
+          </div>
+          <div class="card">
+            <h3>Why Vite</h3>
+            <p>Fast builds, easy static deployment, and low-friction developer workflow.</p>
+          </div>
+          <div class="card">
+            <h3>Why Supabase</h3>
+            <p>Simple cloud sync for a small lodge launch without building a full custom backend first.</p>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          <span>Section 2</span>
+          <span>Technology Stack</span>
+        </div>
+      </section>
+
+      <section class="page">
+        <h2>3. Functional Modules And Added Features</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th>Main Purpose</th>
+              <th>What It Does</th>
+              <th>Added / Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dashboard</td>
+              <td>Daily operations overview</td>
+              <td>Occupancy, revenue, expenses and alerts</td>
+              <td>Professional monochrome presentation</td>
+            </tr>
+            <tr>
+              <td>Guests</td>
+              <td>Guest lifecycle</td>
+              <td>Add guests, reserve room, check-in and check-out</td>
+              <td>Operational flow retained</td>
+            </tr>
+            <tr>
+              <td>Rooms</td>
+              <td>Room inventory management</td>
+              <td>Track room type, status, price and history</td>
+              <td>New add room form added</td>
+            </tr>
+            <tr>
+              <td>Services</td>
+              <td>Food and beverage planning</td>
+              <td>Breakfast and tea schedule with charges</td>
+              <td>New add service form added</td>
+            </tr>
+            <tr>
+              <td>Staff</td>
+              <td>Employee records</td>
+              <td>Attendance, shift and assigned task management</td>
+              <td>New add employee form added</td>
+            </tr>
+            <tr>
+              <td>Expenses</td>
+              <td>Cost control</td>
+              <td>Add and review expense records</td>
+              <td>Existing form retained</td>
+            </tr>
+            <tr>
+              <td>Housekeeping</td>
+              <td>Room cleaning workflow</td>
+              <td>Laundry, cleaning status and notes</td>
+              <td>New add housekeeping form added</td>
+            </tr>
+            <tr>
+              <td>Inventory</td>
+              <td>Supply management</td>
+              <td>Track stock, minimum levels and low stock alerts</td>
+              <td>New add inventory form added</td>
+            </tr>
+            <tr>
+              <td>Users</td>
+              <td>Admin controls</td>
+              <td>Create parent admins with limited permissions</td>
+              <td>Existing form retained</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-2" style="margin-top: 18px;">
+          <div class="card">
+            <h3>Theme Changes</h3>
+            <ul>
+              <li>White theme set as the default</li>
+              <li>Black theme available by toggle</li>
+              <li>Blue-tinted glass styling removed</li>
+              <li>Readable monochrome tables, cards and forms introduced</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Cloud Readiness Changes</h3>
+            <ul>
+              <li>Supabase environment template added</li>
+              <li>Supabase SQL schema file added</li>
+              <li>Remote sync helper introduced</li>
+              <li>Sidebar sync status badge added</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          <span>Section 3</span>
+          <span>Modules And Features</span>
+        </div>
+      </section>
+
+      <section class="page">
+        <h2>4. Function-Wise Logic Breakdown</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Function / Area</th>
+              <th>Responsibility</th>
+              <th>Practical Effect</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>loadState()</strong></td>
+              <td>Loads application data from local storage safely</td>
+              <td>Prevents crashes if stored JSON is damaged</td>
+            </tr>
+            <tr>
+              <td><strong>saveState()</strong></td>
+              <td>Saves latest application state locally</td>
+              <td>Keeps app usable on one device without cloud setup</td>
+            </tr>
+            <tr>
+              <td><strong>updateState()</strong></td>
+              <td>Central state writer for UI + local + remote sync</td>
+              <td>All feature changes move through one reliable path</td>
+            </tr>
+            <tr>
+              <td><strong>toggleTheme()</strong></td>
+              <td>Switches between white and black themes</td>
+              <td>Persistent visual preference for user</td>
+            </tr>
+            <tr>
+              <td><strong>handleLogin()</strong></td>
+              <td>Validates configured user credentials</td>
+              <td>Protects module access using role and permissions</td>
+            </tr>
+            <tr>
+              <td><strong>addGuest()</strong></td>
+              <td>Creates guest and suggests a matching room</td>
+              <td>Front-desk guest intake becomes faster</td>
+            </tr>
+            <tr>
+              <td><strong>checkInGuest()</strong> / <strong>checkOutGuest()</strong></td>
+              <td>Updates guest and room records together</td>
+              <td>Maintains room occupancy consistency</td>
+            </tr>
+            <tr>
+              <td><strong>addRoom()</strong></td>
+              <td>Adds room inventory records</td>
+              <td>Operator can expand room stock directly in the app</td>
+            </tr>
+            <tr>
+              <td><strong>addService()</strong></td>
+              <td>Adds meal service entries</td>
+              <td>Daily food plan and add-on billing can be maintained</td>
+            </tr>
+            <tr>
+              <td><strong>addStaff()</strong></td>
+              <td>Adds employee details and assignments</td>
+              <td>Staff roster can be extended without code changes</td>
+            </tr>
+            <tr>
+              <td><strong>addHousekeeping()</strong></td>
+              <td>Adds cleaning records per room</td>
+              <td>Room readiness can be tracked more clearly</td>
+            </tr>
+            <tr>
+              <td><strong>addInventory()</strong></td>
+              <td>Adds stock item records</td>
+              <td>Supply usage can be monitored as the lodge grows</td>
+            </tr>
+            <tr>
+              <td><strong>remoteState.ts</strong></td>
+              <td>Fetches and saves app state to Supabase</td>
+              <td>Allows data sharing across multiple devices</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="diagram" style="margin-top: 18px;">
+          <span class="label">State Update Flow</span>
+          <svg viewBox="0 0 720 210" width="100%" height="210" aria-label="data flow">
+            <rect x="20" y="78" width="120" height="54" rx="16" fill="#ffffff" stroke="#b8b8af" stroke-width="2"/>
+            <text x="80" y="111" text-anchor="middle" font-size="15" fill="#111111" font-weight="700">User Action</text>
+
+            <rect x="170" y="78" width="150" height="54" rx="16" fill="#f0f0eb" stroke="#b8b8af" stroke-width="2"/>
+            <text x="245" y="102" text-anchor="middle" font-size="15" fill="#111111" font-weight="700">Module Handler</text>
+            <text x="245" y="120" text-anchor="middle" font-size="11" fill="#5f5f5f">addGuest / addRoom / addStaff</text>
+
+            <rect x="350" y="78" width="135" height="54" rx="16" fill="#ffffff" stroke="#b8b8af" stroke-width="2"/>
+            <text x="418" y="111" text-anchor="middle" font-size="15" fill="#111111" font-weight="700">updateState</text>
+
+            <rect x="515" y="28" width="170" height="54" rx="16" fill="#ffffff" stroke="#b8b8af" stroke-width="2"/>
+            <text x="600" y="61" text-anchor="middle" font-size="15" fill="#111111" font-weight="700">localStorage Save</text>
+
+            <rect x="515" y="126" width="170" height="54" rx="16" fill="#111111" stroke="#111111" stroke-width="2"/>
+            <text x="600" y="159" text-anchor="middle" font-size="15" fill="#ffffff" font-weight="700">Supabase Sync</text>
+
+            <line x1="140" y1="105" x2="170" y2="105" stroke="#111111" stroke-width="2"/>
+            <polygon points="170,105 160,99 160,111" fill="#111111"/>
+            <line x1="320" y1="105" x2="350" y2="105" stroke="#111111" stroke-width="2"/>
+            <polygon points="350,105 340,99 340,111" fill="#111111"/>
+            <line x1="485" y1="96" x2="515" y2="62" stroke="#111111" stroke-width="2"/>
+            <polygon points="515,62 504,65 512,73" fill="#111111"/>
+            <line x1="485" y1="114" x2="515" y2="146" stroke="#111111" stroke-width="2"/>
+            <polygon points="515,146 504,142 511,136" fill="#111111"/>
+          </svg>
+        </div>
+
+        <div class="footer-note">
+          <span>Section 4</span>
+          <span>Function-Wise Logic Breakdown</span>
+        </div>
+      </section>
+
+      <section class="page">
+        <h2>5. Hosting, Database And Deployment</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Recommended Option</th>
+              <th>Reason</th>
+              <th>Operational Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frontend Hosting</td>
+              <td>Cloudflare Pages or Netlify</td>
+              <td>Good fit for static Vite builds</td>
+              <td>Easy GitHub-based deployment</td>
+            </tr>
+            <tr>
+              <td>Database</td>
+              <td>Supabase</td>
+              <td>Fastest cloud setup for a one-lodge app</td>
+              <td>Current code is already prepared for it</td>
+            </tr>
+            <tr>
+              <td>Current Data Model</td>
+              <td><code>app_state</code> JSON row</td>
+              <td>Simple and low-friction for MVP use</td>
+              <td>Best for one lodge and early trials</td>
+            </tr>
+            <tr>
+              <td>Future Upgrade</td>
+              <td>Separate normalized tables</td>
+              <td>Better reporting, security, and growth</td>
+              <td>Recommended before scaling to many customers</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-2" style="margin-top: 18px;">
+          <div class="card">
+            <h3>Deployment Checklist</h3>
+            <ul>
+              <li>Push code to GitHub</li>
+              <li>Create Supabase project</li>
+              <li>Run <code>supabase-schema.sql</code></li>
+              <li>Create environment variables</li>
+              <li>Connect repo to hosting platform</li>
+              <li>Build with <code>npm run build</code></li>
+              <li>Publish the <code>dist</code> folder</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Environment Variables</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>VITE_SUPABASE_URL</code></td>
+                  <td>Supabase project URL</td>
+                </tr>
+                <tr>
+                  <td><code>VITE_SUPABASE_ANON_KEY</code></td>
+                  <td>Supabase browser anon key</td>
+                </tr>
+                <tr>
+                  <td><code>VITE_APP_STATE_ROW_ID</code></td>
+                  <td>Single lodge row identifier</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 18px;">
+          <h3>Current Code Quality Status</h3>
+          <ul>
+            <li>TypeScript build passes</li>
+            <li>Vite production build passes</li>
+            <li>Remote sync edge case improved for first-time cloud setup</li>
+            <li>Safer local storage parsing added to avoid startup failure</li>
+          </ul>
+        </div>
+
+        <div class="footer-note">
+          <span>Section 5</span>
+          <span>Hosting, Database And Deployment</span>
+        </div>
+      </section>
+
+      <section class="page">
+        <h2>6. Recommendations Before Selling</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Priority</th>
+              <th>Recommendation</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>High</td>
+              <td>Secure Supabase before serious production rollout</td>
+              <td>The current sync model is deliberately simple for demo and MVP use</td>
+            </tr>
+            <tr>
+              <td>High</td>
+              <td>Use separate hosting / database project per customer</td>
+              <td>Improves isolation, maintainability and support handling</td>
+            </tr>
+            <tr>
+              <td>Medium</td>
+              <td>Add backup export tools</td>
+              <td>Useful for recovery and customer confidence</td>
+            </tr>
+            <tr>
+              <td>Medium</td>
+              <td>Normalize the database later</td>
+              <td>Improves reporting and long-term data flexibility</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-3" style="margin-top: 18px;">
+          <div class="card">
+            <h3>What Is Ready Now</h3>
+            <p>Demo-ready UI, multi-module workflows, GitHub-ready project, and a print-ready product document.</p>
+          </div>
+          <div class="card">
+            <h3>What Is Best Next</h3>
+            <p>Connect Supabase credentials, deploy to hosting, and tighten database rules before active customer usage.</p>
+          </div>
+          <div class="card">
+            <h3>Commercial Position</h3>
+            <p>Suitable for a first lodge pilot, especially when bundled with yearly support and maintenance.</p>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          <span>Section 6</span>
+          <span>Recommendations Before Selling</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -54,7 +54,12 @@ function loadState(): AppState {
     return initialState;
   }
 
-  return JSON.parse(raw) as AppState;
+  try {
+    return JSON.parse(raw) as AppState;
+  } catch {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialState));
+    return initialState;
+  }
 }
 
 function loadTheme(): Theme {
@@ -157,7 +162,26 @@ function App() {
 
     void fetchRemoteState()
       .then((remoteState) => {
-        if (!active || !remoteState) {
+        if (!active) {
+          return;
+        }
+
+        if (!remoteState) {
+          void saveRemoteState(state)
+            .then(() => {
+              if (!active) {
+                return;
+              }
+
+              setSyncStatus("Supabase sync enabled");
+            })
+            .catch(() => {
+              if (!active) {
+                return;
+              }
+
+              setSyncStatus("Local fallback mode");
+            });
           return;
         }
 
